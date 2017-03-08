@@ -24,7 +24,7 @@ class DatabaseSearch < DatabaseConnection
     else
       input = input
     end
-    
+
     return if !type
     return if !input
     return if !table
@@ -42,6 +42,42 @@ class DatabaseSearch < DatabaseConnection
       return result
     else
       return "****ERROR: UNKNOWN ISSUE, PLEASE CONTACT ADMIN****"
+  end
+end
+
+def find_member_by_id(member_id)
+  member_id = member_id
+  error = ""
+  member = []
+
+  return if !member_id
+  @@check_if_connect ? member = @@connection.query("SELECT * FROM member WHERE id='#{member_id}'") : error = "****No connection to database****"
+  member = member.fetch_row if member
+
+  if member.empty? && !error.empty?
+    return "ERROR: #{error}"
+  elsif !member.empty? && error.empty?
+    return member
+  else
+    return "****ERROR: UNKNOWN ISSUE, PLEASE CONTACT ADMIN****"
+  end
+end
+
+def find_vehicle_by_id(vehicle_id)
+  vehicle_id = vehicle_id
+  error = ""
+  vehicle = []
+  return if !vehicle_id
+
+  @@check_if_connect ? vehicle = @@connection.query("SELECT * FROM vehicle WHERE id='#{vehicle_id}'") : error = "****No connection to database****"
+  vehicle = vehicle.fetch_row if vehicle
+
+  if vehicle.empty? && !error.empty?
+    return "ERROR: #{error}"
+  elsif !vehicle.empty? && error.empty?
+    return vehicle
+  else
+    return "****ERROR: UNKNOWN ISSUE, PLEASE CONTACT ADMIN****"
   end
 end
 
